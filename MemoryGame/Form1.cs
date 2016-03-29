@@ -31,15 +31,29 @@ namespace MemoryGame
 
         private void AssignIconsToSquares()
         {
+            List<int> icons = new List<int>();
+            int counter = 16;
+            for(int i = 1; i <= 8; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                    icons.Add(i);
+            }
+
+
             foreach(Control control in tableLayoutPanel1.Controls)
             {
                 Label label = control as Label;
+               // Button button = control as Button;
+                //button.
                 if (label != null)
                 {
-                    int randomNumber = random.Next(icons.Count);
-                    label.Text = icons[randomNumber];
-                    label.ForeColor = label.BackColor;
+                    int randomNumber = random.Next() % counter;
+                    
+                    label.Text = icons[randomNumber].ToString();
+                    //label.
                     icons.RemoveAt(randomNumber);
+                    label.ForeColor = label.BackColor;
+                    counter--;
                 }
 
             }
@@ -75,6 +89,7 @@ namespace MemoryGame
                 {
                     firstClicked = clickedLabel;
                     firstClicked.ForeColor = Color.Black;
+                    firstClicked.BackColor = Color.Yellow;
                     return;
                 }
                 else
@@ -83,6 +98,8 @@ namespace MemoryGame
                     if (checkIcons(firstClicked, secondClicked))
                     {
                         secondClicked.ForeColor = Color.Black;
+                        firstClicked.BackColor = Color.Green;
+                        secondClicked.BackColor = Color.Green;
                         firstClicked = null;
                         secondClicked = null;
                         //if (checkIfPlayerWon())
@@ -93,6 +110,7 @@ namespace MemoryGame
                     else
                     {
                         secondClicked.ForeColor = Color.Black;
+                        secondClicked.BackColor = Color.Yellow;
                         timer1.Start();
                     }
                 }
@@ -131,9 +149,11 @@ namespace MemoryGame
 
           //  if (timer1 != null)
                 timer1.Stop();
-
+            firstClicked.BackColor = Color.CornflowerBlue;
+            secondClicked.BackColor = Color.CornflowerBlue;
             firstClicked.ForeColor = firstClicked.BackColor;
             secondClicked.ForeColor = secondClicked.BackColor;
+
 
             firstClicked = null;
             secondClicked = null;
@@ -141,8 +161,7 @@ namespace MemoryGame
 
         private void CheckForWinner()
         {
-            // Go through all of the labels in the TableLayoutPanel, 
-            // checking each one to see if its icon is matched
+
             foreach (Control control in tableLayoutPanel1.Controls)
             {
                 Label iconLabel = control as Label;
@@ -154,9 +173,7 @@ namespace MemoryGame
                 }
             }
 
-            // If the loop didn’t return, it didn't find
-            // any unmatched icons
-            // That means the user won. Show a message and close the form
+
             MessageBox.Show("You matched all the icons!", "Congratulations");
             Close();
         }
